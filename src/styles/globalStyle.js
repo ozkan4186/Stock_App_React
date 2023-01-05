@@ -1,6 +1,6 @@
 export const btnHoverStyle = {
   cursor: "pointer",
-  "&:hover": { color: "red" },
+  "&:hover": { color: "orangered" },
 };
 export const modalStyle = {
   position: "absolute",
@@ -8,7 +8,7 @@ export const modalStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: "background.paper",
+  bgcolor: "background.yellow",
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
@@ -39,5 +39,5 @@ export const arrowStyle = {
   justifyContent: "center",
   alignItems: "center",
   cursor: "pointer",
-  "&:hover": { color: "red" },
+  "&:hover": { color: "aqua" },
 };
