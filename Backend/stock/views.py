@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import filters
 
 
 
@@ -34,8 +34,9 @@ class BrandMVS(ModelViewSet):
 class ProductMVS(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter]
     filterset_fields = ['id','category', 'stock']
+    search_fields = ['id', 'category','stock']
 
 
 class PurchasesMVS(ModelViewSet):
