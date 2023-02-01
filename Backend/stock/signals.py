@@ -8,9 +8,21 @@ def increase_product_stock(sender, instance, created, **kwargs):
     if created:
         quantity=instance.quantity
         prd_id = instance.product.id
-        current_product=Product.objects.filter(id=prd_id)
-        #print(current_product.stock)
-        Product.objects.filter(id=prd_id).update(stock=current_product[0].stock+quantity)
+        current_product=Product.objects.get(id=prd_id)
+        # print(current_product.stock)
+        current_product.stock += quantity
+        current_product.save()
+
+
+@receiver(post_save, sender=Sales)
+def increase_product_stock(sender, instance, created, **kwargs):
+    if created:
+        quantity = instance.quantity
+        prd_id = instance.product.id
+        current_product = Product.objects.get(id=prd_id)
+        # print(current_product.stock)
+        current_product.stock -= quantity
+        current_product.save()
 
 
 
