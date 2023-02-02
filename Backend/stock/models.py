@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 class Firm(models.Model):
     name=models.CharField(max_length=32)
     phone=models.CharField(max_length=32)
-    address=models.CharField(max_length=32)
+    address=models.CharField(max_length=200)
+    image = models.TextField()
 
     def __str__(self):
         return self.name 
@@ -16,7 +17,8 @@ class Category(models.Model):
         return self.name
 
 class Brand(models.Model):
-    name=models.CharField(max_length=32)
+    name=models.CharField(max_length=32,unique=True)
+    image=models.TextField()
 
     def __str__(self):
         return self.name
@@ -24,11 +26,12 @@ class Brand(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=32)
-    category=models.ForeignKey(Category, on_delete=models.CASCADE)
-    brand=models.ForeignKey(Brand, on_delete=models.CASCADE)
-    stock=models.PositiveSmallIntegerField()
-
+    name = models.CharField(max_length=100, unique=True)
+    category=models.ForeignKey(Category, on_delete=models.CASCADE,related_name="products")
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="b_products")
+    stock=models.PositiveSmallIntegerField(blank=True)
+    createds=models.DateTimeField(auto_now_add=True)
+    updated=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f" {self.name} {self.stock} "
@@ -36,12 +39,12 @@ class Product(models.Model):
 
 class Purchases(models.Model):
     user=models.ForeignKey(User,on_delete=models.PROTECT,null=True)
-    firm=models.ForeignKey(Firm, on_delete=models.PROTECT,null=True)
-    product=models.ForeignKey(Product, on_delete=models.PROTECT,null=True)
-    brand=models.ForeignKey(Brand, on_delete=models.PROTECT,null=True)
+    firm=models.ForeignKey(Firm, on_delete=models.PROTECT,null=True,related_name="purchases")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="purchase")
+    brand=models.ForeignKey(Brand, on_delete=models.PROTECT,null=True,related_name="b_purchases")
     quantity=models.PositiveSmallIntegerField()
     price=models.DecimalField(
-        max_digits=7,
+        max_digits=6,
         decimal_places=2
     )
 
