@@ -15,7 +15,7 @@ def increase_product_stock(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Sales)
-def increase_product_stock(sender, instance, created, **kwargs):
+def decrease_product_stock(sender, instance, created, **kwargs):
     if created:
         quantity = instance.quantity
         prd_id = instance.product.id

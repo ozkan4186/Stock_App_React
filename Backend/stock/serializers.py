@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Firm, Category, Brand, Product, Purchases, Sales
 
 
+
 class FirmSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -10,10 +11,16 @@ class FirmSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    product_count = serializers.SerializerMethodField()  # read_only
 
     class Meta:
         model = Category
-        fields = ("name", "id")
+        fields = ("id", "name", "product_count")
+        
+    def get_product_count(self, obj):
+        return Product.objects.filter(category_id=obj.id).count()
+
+
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -24,10 +31,11 @@ class BrandSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-
+    category=serializers.StringRelatedField()
+    brand=serializers.StringRelatedField()
     class Meta:
         model = Product
-        fields = ("name", "id", "category", "brand", "stock")
+        fields = ("name", "id", "category", "category_id", "brand", "brand_id", "stock",)
 
 
 class PurchasesSerializer(serializers.ModelSerializer):
